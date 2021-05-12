@@ -1,12 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 int main(){
     
-    int i, count=0, N;
-    float d, x, y, pi;
+    srand(time(NULL));
     
-    N = 100000; 
+    int i;
+    float  count=0, N = 100000;
+    double d, x, y, pi, tempo;
+    clock_t t;
+    
+    t = clock();
     
     for(i=0;i<N;i++){
         
@@ -23,9 +28,13 @@ int main(){
         }
     }
     
-    pi = count/N;
-    pi = pi*4;
-    printf("%f = 4 * (%d / %d)", pi, count, N);
+    pi = 4*(count/N);
+    
+    t = clock() - t;
+    tempo = ((double) t)/CLOCKS_PER_SEC;
+    
+    printf("%lf \n", tempo);
+    printf("\n%lf = 4 * (%f / %f)", pi, count, N);
     
     return 0;
 }
