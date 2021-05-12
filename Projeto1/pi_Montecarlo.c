@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int N = 100000;
-
 int main(){
     
-    int i, count=0;
+    int i, count=0, N;
     float d, x, y, pi;
+    
+    N = 100000; 
     
     for(i=0;i<N;i++){
         
@@ -18,13 +18,13 @@ int main(){
         
         d = x+y;
         
-        if(d<=1){
+        if(d<1){
             count++;
         }
     }
     
-    pi = 4*(count/N);
-    
+    pi = count/N;
+    pi = pi*4;
     printf("%f = 4 * (%d / %d)", pi, count, N);
     
     return 0;
