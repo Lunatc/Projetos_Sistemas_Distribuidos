@@ -1,20 +1,21 @@
-#include <stdio.h>	//printf
-#include <string.h>	//strlen
-#include <sys/socket.h>	//socket
-#include <arpa/inet.h>	//inet_addr
+#include <stdio.h>	
+#include <string.h>	
+#include <stdlib.h>
+#include <sys/socket.h>//socket operations
+#include <arpa/inet.h>	//internet operatios
 #include <unistd.h>
 
-int main(int argc , char *argv[])
-{
+int main(int argc , char *argv[]){
+
 	int sock;
 	struct sockaddr_in server;
 	char message[1000] , server_reply[2000];
 	
-	//Create socket
+	//Cria o socket
 	sock = socket(AF_INET , SOCK_STREAM , 0);
-	if (sock == -1)
-	{
-		printf("Could not create socket");
+	if (sock == -1){
+		printf("Erro em criar o socket");
+		exit(1);
 	}
 	puts("Socket created");
 	
@@ -29,7 +30,7 @@ int main(int argc , char *argv[])
 		return 1;
 	}
 	
-	puts("Connected\n");
+	puts("Conectado\n");
 	
 	//keep communicating with server
 	while(1)
