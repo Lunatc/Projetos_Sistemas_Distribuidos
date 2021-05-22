@@ -4,7 +4,7 @@
 #include<sys/socket.h>
 #include<arpa/inet.h>	//inet_addr
 #include<unistd.h>	//write
-
+#include <time.h>
 #include<pthread.h> //for threading , link with lpthread
 
 void *connection_handler(void *);
@@ -14,6 +14,9 @@ int main(int argc , char *argv[])
 	int socket_desc , new_socket , c , *new_sock;
 	struct sockaddr_in server , client;
 	char *message;
+
+	double tempo;
+    clock_t t;
 	
 	//Create socket
 	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
@@ -48,6 +51,12 @@ int main(int argc , char *argv[])
 		//Reply to the client
 		message = "Hello Client , I have received your connection. And now I will assign a handler for you\n";
 		write(new_socket , message , strlen(message));
+
+		t = clock();
+		//tarefa
+		t = clock() - t;
+
+		tempo = ((double) t)/CLOCKS_PER_SEC;
 		
 		pthread_t sniffer_thread;
 		new_sock = malloc(1);
