@@ -92,14 +92,10 @@ void *connection_handler(void *socket_desc)
 	
 	double tempo;
     	clock_t t;
-	
+		
 	
 	//Receive a message from client
 	t = clock();
-	//while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 ){
-	//	message = "Recebido";
-	//	write(sock , message , strlen(message));
-	//}
 	
 	if((read_size = recv(sock , client_message , 2000 , 0)) < 0){
 		puts("recv failed");

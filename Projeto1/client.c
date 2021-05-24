@@ -12,7 +12,8 @@ int main(int argc , char *argv[]){
 	struct sockaddr_in server;
 	char message[1000] , server_reply[2000];
 	//char *message, server_reply[2000];
-	int    atoi (const char *str);      // string to integer, ascii to int 
+	int  atoi (const char *str);      // string to integer, ascii to int 
+	srand(time(NULL));
 
 	int i, N;
     	float  count=0;
@@ -40,27 +41,25 @@ int main(int argc , char *argv[]){
 	puts("Conectado\n");
 	
 	//keep communicating with server
-	while(1)
-	{
+	while(1){
+			
 			
 		//Send some data
-		if( send(sock , message , strlen(message) , 0) < 0)
-		{
+		/*if( send(sock , message , strlen(message) , 0) < 0){
 			puts("Send failed");
 			return 1;
-		}
+		}*/
 		
 		//Receive a reply from the server
-		if( recv(sock , server_reply , 2000 , 0) < 0)
-		{
+		if( recv(sock , server_reply , 2000 , 0) < 0){
 			puts("recv failed");
 			break;
 		}
 		
-		printf("a");
-		sprintf(N, "%s", server_reply);
+		printf("Server REsponde:%s",server_reply);
 		
-		srand(time(NULL));
+		N = atoi(server_reply);
+		printf("%d é:",N);
     
     		for(i=0;i<N;i++){
         
@@ -77,30 +76,25 @@ int main(int argc , char *argv[]){
         		}
     		}
     		
-    		printf("BAtata");
+    		//printf("BAtata");
     
 		pi = 4*(count/N);
 		//printf("\n%lf = 4 * (%f / %f)", pi, count, N);
-		sprintf (message, "%f", pi) ;
-		printf("%s",message);
-		
+		sprintf (message, "%lf", pi);
+		//printf("%s",message);
 		
 		//Send some data
-		if( send(sock , message , strlen(message) , 0) < 0)
-		{
+		if( send(sock , message , strlen(message) , 0) < 0){
 			puts("Send failed");
 			return 1;
 		}
 		
 		//Receive a reply from the server
-		if( recv(sock , server_reply , 2000 , 0) < 0)
-		{
+		if( recv(sock , server_reply , 2000 , 0) < 0){
 			puts("recv failed");
 			break;
 		}
 		
-		puts("Server reply :");
-		puts(server_reply);
 	}
 	
 	close(sock);
