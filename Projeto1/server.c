@@ -1,17 +1,16 @@
 #include<stdio.h>
-#include<string.h>	//strlen
-#include<stdlib.h>	//strlen
+#include<string.h>	
+#include<stdlib.h>	
 #include<sys/socket.h>
-#include<arpa/inet.h>	//inet_addr
-#include<unistd.h>	//write
+#include<arpa/inet.h>	
+#include<unistd.h>	
 #include<time.h>
-#include<pthread.h> //for threading , link with lpthread
+#include<pthread.h> 
 #include<math.h>
 
 void *connection_handler(void *);
 
-int main(int argc , char *argv[])
-{
+int main(int argc , char *argv[]){
 	int socket_desc , new_socket , c , *new_sock;
 	struct sockaddr_in server , client;
 	char message[1000];
@@ -34,7 +33,7 @@ int main(int argc , char *argv[])
 		puts("bind failed");
 		return 1;
 	}
-	puts("bind done");
+	puts("Bind done");
 	
 	//Listen
 	listen(socket_desc , 3);
@@ -43,14 +42,14 @@ int main(int argc , char *argv[])
 	scanf("%d",&n);
 		
 	N = pow(10,n);
-	printf("%d\n",N);
 	
 	//Accept and incoming connection
 	puts("Waiting for incoming connections...");
 	c = sizeof(struct sockaddr_in);
-	while( (new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
-	{
-	
+	while( (new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) ){
+		
+		printf("Cliente conectado");
+		
 		//Numero para o for
 		sprintf (message, "%d", N);
 		write(new_socket , message , strlen(message));
@@ -92,7 +91,10 @@ void *connection_handler(void *socket_desc)
 	
 	double tempo;
     	clock_t t;
-		
+	
+	/*while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 ){
+		write(sock, client_message, strlen(client_message));
+	}*/	
 	
 	//Receive a message from client
 	t = clock();

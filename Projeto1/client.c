@@ -1,8 +1,8 @@
 #include <stdio.h>	
 #include <string.h>	
 #include <stdlib.h>
-#include <sys/socket.h>//socket operations
-#include <arpa/inet.h>	//internet operatios
+#include <sys/socket.h>
+#include <arpa/inet.h>	
 #include <unistd.h>
 #include <time.h>
 
@@ -10,45 +10,47 @@ int main(int argc , char *argv[]){
 
 	int sock;
 	struct sockaddr_in server;
-	char message[1000] , server_reply[2000];
-	//char *message, server_reply[2000];
+	char message[1000] , server_reply[2000];  //char *message, server_reply[2000];
 	int  atoi (const char *str);      // string to integer, ascii to int 
-	srand(time(NULL));
-
 	int i, N;
     	float  count=0;
     	double d, x, y, pi;
+    	
+	srand(time(NULL));
 	
 	//Cria o socket
 	sock = socket(AF_INET , SOCK_STREAM , 0);
+	
 	if (sock == -1){
 		printf("Erro em criar o socket");
 		exit(1);
 	}
-	puts("Socket created");
+	printf("Socket criado\n");
+	
 	
 	server.sin_addr.s_addr = inet_addr("127.0.0.1");
 	server.sin_family = AF_INET;
 	server.sin_port = htons( 8888 );
 
-	//Connect to remote server
+	//Conectar ao server local
 	if (connect(sock , (struct sockaddr *)&server , sizeof(server)) < 0)
 	{
-		perror("connect failed. Error");
+		perror("A conexão falhou. Erro!");
 		return 1;
 	}
 	
-	puts("Conectado\n");
+	printf("Conectado\n");
 	
 	//keep communicating with server
 	while(1){
 			
+		strcpy(message,"Connected");
 			
 		//Send some data
-		/*if( send(sock , message , strlen(message) , 0) < 0){
+		if( send(sock , message , strlen(message) , 0) < 0){
 			puts("Send failed");
 			return 1;
-		}*/
+		}
 		
 		//Receive a reply from the server
 		if( recv(sock , server_reply , 2000 , 0) < 0){
@@ -56,10 +58,10 @@ int main(int argc , char *argv[]){
 			break;
 		}
 		
-		printf("Server REsponde:%s",server_reply);
+		printf("Server Responde:%s",server_reply);
 		
 		N = atoi(server_reply);
-		printf("%d é:",N);
+		//printf("é: %d",N);
     
     		for(i=0;i<N;i++){
         
