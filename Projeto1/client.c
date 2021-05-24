@@ -11,10 +11,12 @@ int main(int argc , char *argv[]){
 	int sock;
 	struct sockaddr_in server;
 	char message[1000] , server_reply[2000];
+	//char *message, server_reply[2000];
+	int    atoi (const char *str);      // string to integer, ascii to int 
 
-	int i;
-    float  count=0, N = 100000;
-    double d, x, y, pi;
+	int i, N;
+    	float  count=0;
+    	double d, x, y, pi;
 	
 	//Cria o socket
 	sock = socket(AF_INET , SOCK_STREAM , 0);
@@ -40,18 +42,25 @@ int main(int argc , char *argv[]){
 	//keep communicating with server
 	while(1)
 	{
-		printf("Enter message : ");
-		scanf("%s" , message);
-		
+			
 		//Send some data
 		if( send(sock , message , strlen(message) , 0) < 0)
 		{
 			puts("Send failed");
 			return 1;
 		}
-
+		
+		//Receive a reply from the server
+		if( recv(sock , server_reply , 2000 , 0) < 0)
+		{
+			puts("recv failed");
+			break;
+		}
+		
+		printf("a");
+		sprintf(N, "%s", server_reply);
+		
 		srand(time(NULL));
-    
     
     		for(i=0;i<N;i++){
         
@@ -64,11 +73,24 @@ int main(int argc , char *argv[]){
         		d = x+y;
         
         		if(d<1){
-            		count++;
+            			count++;
         		}
     		}
+    		
+    		printf("BAtata");
     
-		    pi = 4*(count/N);
+		pi = 4*(count/N);
+		//printf("\n%lf = 4 * (%f / %f)", pi, count, N);
+		sprintf (message, "%f", pi) ;
+		printf("%s",message);
+		
+		
+		//Send some data
+		if( send(sock , message , strlen(message) , 0) < 0)
+		{
+			puts("Send failed");
+			return 1;
+		}
 		
 		//Receive a reply from the server
 		if( recv(sock , server_reply , 2000 , 0) < 0)

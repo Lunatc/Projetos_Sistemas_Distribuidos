@@ -4,8 +4,9 @@
 #include<sys/socket.h>
 #include<arpa/inet.h>	//inet_addr
 #include<unistd.h>	//write
-#include <time.h>
+#include<time.h>
 #include<pthread.h> //for threading , link with lpthread
+#include<math.h>
 
 void *connection_handler(void *);
 
@@ -13,15 +14,13 @@ int main(int argc , char *argv[])
 {
 	int socket_desc , new_socket , c , *new_sock;
 	struct sockaddr_in server , client;
-	char *message;
-
-	double tempo;
-    clock_t t;
+	char message[1000];
+	int N, n;
+	int atoi (const char *str);
 	
 	//Create socket
 	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
-	if (socket_desc == -1)
-	{
+	if (socket_desc == -1){
 		printf("Could not create socket");
 	}
 	
@@ -31,8 +30,7 @@ int main(int argc , char *argv[])
 	server.sin_port = htons( 8888 );
 	
 	//Bind
-	if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0)
-	{
+	if( bind(socket_desc,(struct sockaddr *)&server , sizeof(server)) < 0){
 		puts("bind failed");
 		return 1;
 	}
@@ -41,22 +39,21 @@ int main(int argc , char *argv[])
 	//Listen
 	listen(socket_desc , 3);
 	
+	printf("Escreva o número de sorteios (entre 3 e 10):\n");
+	scanf("%d",&n);
+		
+	N = pow(10,n);
+	printf("%d\n",N);
+	
 	//Accept and incoming connection
 	puts("Waiting for incoming connections...");
 	c = sizeof(struct sockaddr_in);
 	while( (new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) )
 	{
-		puts("Connection accepted");
-		
-		//Reply to the client
-		message = "Hello Client , I have received your connection. And now I will assign a handler for you\n";
+	
+		//Numero para o for
+		sprintf (message, "%d", N);
 		write(new_socket , message , strlen(message));
-
-		t = clock();
-		//tarefa
-		t = clock() - t;
-
-		tempo = ((double) t)/CLOCKS_PER_SEC;
 		
 		pthread_t sniffer_thread;
 		new_sock = malloc(1);
@@ -67,6 +64,7 @@ int main(int argc , char *argv[])
 			perror("could not create thread");
 			return 1;
 		}
+	
 		
 		//Now join the thread , so that we dont terminate before the thread
 		//pthread_join( sniffer_thread , NULL);
@@ -92,19 +90,26 @@ void *connection_handler(void *socket_desc)
 	int read_size;
 	char *message , client_message[2000];
 	
-	//Send some messages to the client
-	message = "Greetings! I am your connection handler\n";
-	write(sock , message , strlen(message));
+	double tempo;
+    	clock_t t;
 	
-	message = "Now type something and i shall repeat what you type \n";
-	write(sock , message , strlen(message));
 	
 	//Receive a message from client
-	while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 )
-	{
-		//Send the message back to client
-		write(sock , client_message , strlen(client_message));
+	t = clock();
+	//while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 ){
+	//	message = "Recebido";
+	//	write(sock , message , strlen(message));
+	//}
+	
+	if((read_size = recv(sock , client_message , 2000 , 0)) < 0){
+		puts("recv failed");
 	}
+	
+	t = clock() - t;
+		
+	tempo = ((double) t)/CLOCKS_PER_SEC;
+	printf("%lf \n", tempo);
+    	printf("\n O valor de pi é:%s", client_message);
 	
 	if(read_size == 0)
 	{
