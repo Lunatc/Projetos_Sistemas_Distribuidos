@@ -5,15 +5,17 @@
 #include <arpa/inet.h>	
 #include <unistd.h>
 #include <time.h>
+#include <limits.h>
+#include <float.h>
 
 int main(int argc , char *argv[]){
 
 	int sock;
 	struct sockaddr_in server;
 	char message[1000] , server_reply[2000];  //char *message, server_reply[2000];
-	int  atoi (const char *str);      // string to integer, ascii to int 
-	int i, N;
-    	float  count=0;
+	int i;
+    	float count=0;
+    	long N;
     	double d, x, y, pi;
     	
 	srand(time(NULL));
@@ -41,13 +43,13 @@ int main(int argc , char *argv[]){
 	
 	printf("Conectado\n");
 	
+	strcpy(message,"oi\n");
+	
 	//keep communicating with server
-	while(1){
-			
-		strcpy(message,"Connected");
-			
+	//while(1){
+		
 		//Send some data
-		if( send(sock , message , strlen(message) , 0) < 0){
+		if( send(sock ,message , strlen(message) , 0) < 0){
 			puts("Send failed");
 			return 1;
 		}
@@ -55,13 +57,15 @@ int main(int argc , char *argv[]){
 		//Receive a reply from the server
 		if( recv(sock , server_reply , 2000 , 0) < 0){
 			puts("recv failed");
-			break;
-		}
+			//break;
+		}	
 		
-		printf("Server Responde:%s",server_reply);
+		puts(server_reply);
 		
-		N = atoi(server_reply);
-		//printf("é: %d",N);
+		N = strtol(server_reply, NULL, 10);
+		
+		//N = atoi(server_reply);
+		printf("N é:%ld",N);
     
     		for(i=0;i<N;i++){
         
@@ -78,26 +82,13 @@ int main(int argc , char *argv[]){
         		}
     		}
     		
-    		//printf("BAtata");
     
 		pi = 4*(count/N);
-		//printf("\n%lf = 4 * (%f / %f)", pi, count, N);
-		sprintf (message, "%lf", pi);
-		//printf("%s",message);
 		
-		//Send some data
-		if( send(sock , message , strlen(message) , 0) < 0){
-			puts("Send failed");
-			return 1;
-		}
+		sprintf (message, "%f", pi);
+		printf("Pi é:%lf",pi);
 		
-		//Receive a reply from the server
-		if( recv(sock , server_reply , 2000 , 0) < 0){
-			puts("recv failed");
-			break;
-		}
-		
-	}
+	//}
 	
 	close(sock);
 	return 0;

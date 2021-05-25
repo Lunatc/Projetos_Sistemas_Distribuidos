@@ -7,15 +7,21 @@
 #include<time.h>
 #include<pthread.h> 
 #include<math.h>
+#include <limits.h>
+#include <float.h>
+
+
+long N;
 
 void *connection_handler(void *);
 
 int main(int argc , char *argv[]){
 	int socket_desc , new_socket , c , *new_sock;
-	struct sockaddr_in server , client;
 	char message[1000];
-	int N, n;
 	int atoi (const char *str);
+	int n; 
+	
+	struct sockaddr_in server , client;
 	
 	//Create socket
 	socket_desc = socket(AF_INET , SOCK_STREAM , 0);
@@ -40,7 +46,7 @@ int main(int argc , char *argv[]){
 	
 	printf("Escreva o número de sorteios (entre 3 e 10):\n");
 	scanf("%d",&n);
-		
+			
 	N = pow(10,n);
 	
 	//Accept and incoming connection
@@ -48,11 +54,7 @@ int main(int argc , char *argv[]){
 	c = sizeof(struct sockaddr_in);
 	while( (new_socket = accept(socket_desc, (struct sockaddr *)&client, (socklen_t*)&c)) ){
 		
-		printf("Cliente conectado");
-		
-		//Numero para o for
-		sprintf (message, "%d", N);
-		write(new_socket , message , strlen(message));
+		printf("Cliente conectado\n");
 		
 		pthread_t sniffer_thread;
 		new_sock = malloc(1);
@@ -67,7 +69,7 @@ int main(int argc , char *argv[]){
 		
 		//Now join the thread , so that we dont terminate before the thread
 		//pthread_join( sniffer_thread , NULL);
-		puts("Handler assigned");
+		puts("Handler assigned\n");
 	}
 	
 	if (new_socket<0)
@@ -86,28 +88,43 @@ void *connection_handler(void *socket_desc)
 {
 	//Get the socket descriptor
 	int sock = *(int*)socket_desc;
-	int read_size;
-	char *message , client_message[2000];
-	
+	int read_size, count=0;
+	char message[1000] , client_message[2000];
 	double tempo;
+	
     	clock_t t;
 	
-	/*while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 ){
-		write(sock, client_message, strlen(client_message));
-	}*/	
+	//Send some messages to the client
+	
+	sprintf(message, "%ld", N);
 	
 	//Receive a message from client
-	t = clock();
+	while( (read_size = recv(sock , client_message , 2000 , 0)) > 0 ){
+		
+		puts(client_message);	
+		
+		write(sock , message , strlen(message));
+		
+	}	
+		
+		
+		if(count==1){
+			t = clock();
+			printf("\n O valor de pi é:%s", client_message);
+			t = clock() - t;
+		}
+		//break;
+		count++;
+	
+	strcpy(message,"Obrigada pela sua ajuda\n");
+	write(sock , message , strlen(message));
 	
 	if((read_size = recv(sock , client_message , 2000 , 0)) < 0){
 		puts("recv failed");
 	}
-	
-	t = clock() - t;
 		
 	tempo = ((double) t)/CLOCKS_PER_SEC;
 	printf("%lf \n", tempo);
-    	printf("\n O valor de pi é:%s", client_message);
 	
 	if(read_size == 0)
 	{
