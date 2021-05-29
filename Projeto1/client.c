@@ -12,12 +12,11 @@ int main(int argc , char *argv[]){
 	struct sockaddr_in server;
 	
 	char message[2000];
-	//int    atoi (const char *str);      // string to integer, ascii to int 
+	srand(time(NULL));
 
 	int i;
     	float count=0;
-    	long N;
-    	double d, x, y, pi;
+    	double d, x, y, pi,N;
     	
     	//Cria o socket
 	sock = socket(AF_INET , SOCK_STREAM , 0);
@@ -42,11 +41,10 @@ int main(int argc , char *argv[]){
 	puts("Conectado\n");
 	
 	//Receive message
-	if( recv(sock , message , 2000 , 0) < 0){
-		puts("recv failed");
-		return 1;
+	while(recv(sock , message , 2000 , 0) < 0){
+		
 	}
-	
+	printf("Trabalho recebido");
 	N = strtol(message, NULL, 10);
 	
 	for(i=0;i<N;i++){
@@ -73,6 +71,15 @@ int main(int argc , char *argv[]){
 		puts("Send failed");
 		return 1;
 	}
+	
+	//Receive message
+	if( recv(sock , message , 2000 , 0) < 0){
+		puts("recv failed");
+		return 1;
+	}
+	puts(message);
+	
+	
 	close(sock);
 	return 0;
 }

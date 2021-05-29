@@ -5,12 +5,12 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <unistd.h>
-#include<math.h>
+#include <math.h>
 
 
 int main(int argc , char *argv[]){
 	
-	int socket_d , new_socket[16] , c;
+	int socket_d , new_socket[20] , c;
 	
 	struct sockaddr_in server , client;
 	
@@ -19,8 +19,6 @@ int main(int argc , char *argv[]){
 	long N;
 	double resultado, tempo;
     	clock_t t;
-	
-	//int atoi (const char *str);
 	
 	//Create socket
 	socket_d = socket(AF_INET , SOCK_STREAM , 0);
@@ -41,7 +39,7 @@ int main(int argc , char *argv[]){
 	puts("Bind done");
 	
 	//Listen
-	listen(socket_d , 16);
+	listen(socket_d , 25);
 	
 	puts("Escreva o número de clientes esperados:(2, 4, 8 ou 16)\n");
 	scanf("%d",&num_clientes);
@@ -66,7 +64,7 @@ int main(int argc , char *argv[]){
 			return 1;
 		}
 		
-		printf("Cliente conectado\n");
+		printf("%d:Cliente conectado\n",i+1);
 		
 		if (new_socket[i]<0){
 			perror("accept failed");
@@ -93,6 +91,12 @@ int main(int argc , char *argv[]){
 	t = clock() - t;
 	tempo = ((double) t)/CLOCKS_PER_SEC;
 	printf("Tempo de execucao: %lf \n", tempo);
+	
+	for(i=0;i<num_clientes;i++){	
+		
+		send(new_socket[i], "Concluido", strlen(message), 0);
+            
+	}
 	
 	
 	printf("Pi:%f",resultado);
