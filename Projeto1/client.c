@@ -16,7 +16,8 @@ int main(int argc , char *argv[]){
 
 	int i;
     	float count=0;
-    	double d, x, y, pi,N;
+    	double d, x, y, pi
+    	long N;
     	
     	//Cria o socket
 	sock = socket(AF_INET , SOCK_STREAM , 0);

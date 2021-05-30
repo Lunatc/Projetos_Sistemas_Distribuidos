@@ -16,7 +16,7 @@ int main(int argc , char *argv[]){
 	
 	char message[2000], client_message[2000];
 	int n,num_clientes, i=0; 
-	long N;
+	long long N;
 	double resultado, tempo;
     	clock_t t;
 	
@@ -48,14 +48,14 @@ int main(int argc , char *argv[]){
 	scanf("%d",&n);
 		
 	N = pow(10,n);
-	printf("N:%ld\n",N); //teste
+	printf("N:%lld\n",N); //teste
 	
 	//Accept and incoming connection
 	puts("Waiting for incoming connections...");
 	c = sizeof(struct sockaddr_in);
 	
 	N = N/num_clientes;
-	sprintf(message, "%ld", N);
+	sprintf(message, "%lld", N);
 	
 	for(i=0;i<num_clientes;i++){
 		
