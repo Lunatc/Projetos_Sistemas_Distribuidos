@@ -16,7 +16,7 @@ int main(int argc , char *argv[]){
 
 	int i;
     	float count=0;
-    	double d, x, y, pi
+    	double d, x, y, pi;
     	long N;
     	
     	//Cria o socket
