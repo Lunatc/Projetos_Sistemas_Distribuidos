@@ -6,29 +6,26 @@ int main(){
     
     srand(time(NULL));
     
-    int i;
-    double  count=0; 
-	long double N = 100000000;
-    double d, x, y, pi, tempo;
+    double pi, tempo, count = 0; 
+    long int i, N;
+    long double x, y;
     clock_t t;
-	    
-    t = clock();
     
+    N=1000000000;
+    
+    t = clock();
+     
     for(i=0;i<N;i++){
             
         x = ((double) rand() / (RAND_MAX));
         y = ((double) rand() / (RAND_MAX));
         
-        x = x*x;
-        y = y*y;
-        
-        d = x+y;
-        
-        if(d<1){
+        if(((x*x)+(y*y))<1){
             count++;
         }
            
     }
+
         
     pi = 4*(count/N);
 		 
@@ -36,7 +33,7 @@ int main(){
     tempo = ((double) t)/CLOCKS_PER_SEC;
         
     printf("tempo = %lf \n", tempo);
-    printf("\n%lf = 4 * (%f / %Lf)\n", pi, count, N);
+    printf("\n%lf = 4 * (%f / %f)\n", pi, count, N);
         
     return 0;
 }
