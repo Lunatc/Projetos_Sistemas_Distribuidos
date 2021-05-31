@@ -13,11 +13,10 @@ int main(int argc , char *argv[]){
 	
 	char message[2000];
 	srand(time(NULL));
-
-	int i;
-    	double count=0;
-    	double d, x, y, pi;
-    	long double N;
+    	
+    	double pi, count = 0; 
+    	long int i, N;
+    	long double x, y, d;
     	
     	//Cria o socket
 	sock = socket(AF_INET , SOCK_STREAM , 0);
