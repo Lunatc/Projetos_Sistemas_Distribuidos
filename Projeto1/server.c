@@ -3,22 +3,23 @@
 #include <stdlib.h>
 #include <time.h>
 #include <sys/socket.h>
+#include <sys/time.h>
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <math.h>
 
-
 int main(int argc , char *argv[]){
 	
 	int socket_d , new_socket[20] , c;
-	
+	//time_t inicio, fim;
+	struct timeval start, end;
+    
 	struct sockaddr_in server , client;
 	
 	char message[2000], client_message[2000];
 	int n,num_clientes, i=0; 
 	long long N;
 	double resultado, tempo;
-    	clock_t t;
 	
 	//Create socket
 	socket_d = socket(AF_INET , SOCK_STREAM , 0);
@@ -41,10 +42,10 @@ int main(int argc , char *argv[]){
 	//Listen
 	listen(socket_d , 25);
 	
-	puts("Escreva o número de clientes esperados:(2, 4, 8 ou 16)\n");
+	puts("Escreva o numero de clientes esperados:(2, 4, 8 ou 16)\n");
 	scanf("%d",&num_clientes);
 	
-	printf("Escreva o número de sorteios (entre 3 e 10):\n");
+	printf("Escreva o numero de sorteios (entre 3 e 10):\n");
 	scanf("%d",&n);
 		
 	N = pow(10,n);
@@ -66,27 +67,23 @@ int main(int argc , char *argv[]){
 		
 		printf("%d:Cliente conectado\n",i+1);
 		
-		/*if (new_socket[i]<0){
+		if (new_socket[i]<0){
 			perror("accept failed");
 			return 1;
-		}*/
-		
+		}
 	}
 	
 	printf("All clients connected!");
-	
-	t = clock();
+	gettimeofday(&start, NULL);
+	//inicio = time(NULL);
 	for(i=0;i<num_clientes;i++){	
 		
 		send(new_socket[i], message, strlen(message), 0);
-		
-		
-    
+	
             
 	}
 	
 	for(i=0;i<num_clientes;i++){	
-		
 		
             if ((recv(new_socket[i], client_message, strlen(message), 0)) > 0){
                 resultado += atof(client_message);
@@ -94,16 +91,23 @@ int main(int argc , char *argv[]){
             
 	}
 	
-	resultado = resultado/num_clientes;
 	
-	t = clock() - t;
-	tempo = ((double) t)/CLOCKS_PER_SEC;
-	printf("Tempo de execucao: %lf \n", tempo);
+	resultado = resultado/num_clientes;
+	gettimeofday(&end, NULL);
+	tempo = ((end.tv_sec * 1000000 + end.tv_usec) - (start.tv_sec * 1000000 + start.tv_usec));
+	printf("Time taken : %f seconds\n", tempo/1000000);
+	///fim = time(NULL);
+	//fprintf(stdout, "O tempo de execucao em segundos e %f\n", difftime(fim, inicio));
+	
+	for(i=0;i<num_clientes;i++){	
+		
+		send(new_socket[i], "Concluido", strlen(message), 0);
+            
+	}
 	
 	printf("Pi:%f",resultado);
-	close(socket_d);
-	for(i=0;i<20;i++)
-		close(new_socket[i]);	
+	
+	
 	return 0;
+	
 }
-
