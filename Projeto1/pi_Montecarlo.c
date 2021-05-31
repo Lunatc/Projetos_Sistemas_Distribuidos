@@ -8,7 +8,7 @@ int main(){
     
     int i;
     double  count=0; 
-	long double N = 3100000000;
+	long double N = 100000000;
     double d, x, y, pi, tempo;
     clock_t t;
 	    
@@ -36,7 +36,7 @@ int main(){
     tempo = ((double) t)/CLOCKS_PER_SEC;
         
     printf("tempo = %lf \n", tempo);
-    printf("\n%lf = 4 * (%f / %f)\n", pi, count, N);
+    printf("\n%lf = 4 * (%f / %Lf)\n", pi, count, N);
         
     return 0;
 }

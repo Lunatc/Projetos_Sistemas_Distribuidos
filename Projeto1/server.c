@@ -66,10 +66,11 @@ int main(int argc , char *argv[]){
 		
 		printf("%d:Cliente conectado\n",i+1);
 		
-		if (new_socket[i]<0){
+		/*if (new_socket[i]<0){
 			perror("accept failed");
 			return 1;
-		}
+		}*/
+		
 	}
 	
 	printf("All clients connected!");
@@ -78,6 +79,13 @@ int main(int argc , char *argv[]){
 	for(i=0;i<num_clientes;i++){	
 		
 		send(new_socket[i], message, strlen(message), 0);
+		
+		
+    
+            
+	}
+	
+	for(i=0;i<num_clientes;i++){	
 		
 		
             if ((recv(new_socket[i], client_message, strlen(message), 0)) > 0){
@@ -92,13 +100,10 @@ int main(int argc , char *argv[]){
 	tempo = ((double) t)/CLOCKS_PER_SEC;
 	printf("Tempo de execucao: %lf \n", tempo);
 	
-	for(i=0;i<num_clientes;i++){	
-		
-		send(new_socket[i], "Concluido", strlen(message), 0);
-            
-	}
-	
-	
 	printf("Pi:%f",resultado);
-
+	close(socket_d);
+	for(i=0;i<20;i++)
+		close(new_socket[i]);	
+	return 0;
 }
+

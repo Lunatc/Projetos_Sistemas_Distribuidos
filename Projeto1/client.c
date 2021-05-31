@@ -15,9 +15,9 @@ int main(int argc , char *argv[]){
 	srand(time(NULL));
 
 	int i;
-    	float count=0;
+    	double count=0;
     	double d, x, y, pi;
-    	long N;
+    	long double N;
     	
     	//Cria o socket
 	sock = socket(AF_INET , SOCK_STREAM , 0);
@@ -41,12 +41,14 @@ int main(int argc , char *argv[]){
 	
 	puts("Conectado\n");
 	
+	
 	//Receive message
 	while(recv(sock , message , 2000 , 0) < 0){
 		
 	}
+	puts(message);
 	printf("Trabalho recebido");
-	N = strtol(message, NULL, 10);
+	N = strtold(message, NULL);
 	
 	for(i=0;i<N;i++){
         
@@ -72,14 +74,7 @@ int main(int argc , char *argv[]){
 		puts("Send failed");
 		return 1;
 	}
-	
-	//Receive message
-	if( recv(sock , message , 2000 , 0) < 0){
-		puts("recv failed");
-		return 1;
-	}
-	puts(message);
-	
+	 close(sock);
 	
 	close(sock);
 	return 0;
