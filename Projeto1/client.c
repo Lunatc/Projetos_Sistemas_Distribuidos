@@ -1,3 +1,9 @@
+/*/
+============================================================================
+Trabalho 1 de Sistemas Distribuidos - Código Cliente
+Nomes: Cintia Bras Mesquita, Igor Yoshimitsu Ide e Tiago Pinheiro Camargo
+============================================================================
+/*/
 #include <stdio.h>	
 #include <string.h>	
 #include <stdlib.h>
